@@ -32,7 +32,8 @@ class burgermeister
 {
 	private:
 	string m_name;
-	float m_montHold
+	float m_montHold;
+	
 	
 	public:
 	burgermeister()
@@ -48,11 +49,18 @@ class burgermeister
 	  m_montHold = mon;
     }
 	
-	friend burgermeister operator+= (const float money);
-	friend burgermeister operator-= (const float money);
+	friend burgermeister operator+=(burgermeister& Krusty, 
+	const float money);
 	
+	friend burgermeister operator-=(burgermeister& Krusty, 
+	const float money);
 	
-}
+	//Desc: gets the montHold in the burgermeister 
+	//Pre:none
+	//Post: returned the montHold
+	int getMontHold();
+	
+};
 class burger
 {
   private:
@@ -170,6 +178,7 @@ class customer
     bool m_alive;
 	int m_health;
 	bool m_vomit;
+	bool m_isContestant;
 	
   public:
     //default constructor
@@ -181,8 +190,9 @@ class customer
       m_money =  25 + rand() % (51);
       m_weight = 90 + rand() % (161);
       m_alive = true;
-	  m_health = (1 + rand() % (100);
+	  m_health = (1 + rand() % (100));
 	  m_vomit = false;
+	  m_isContestant = true;
     }
         
     //Desc: gets the name of the customer
@@ -225,7 +235,7 @@ class customer
     //if a pathagen is present then will kill the customer
     //Pre: Customer must be alive
     //Post: Customers money, cholesterol, weight and aliveness were changed
-    void eat(burger burg);
+    void eat();
 	//Desc: Will throw a burger at a random person in the array or krusty
 	//Pre: None
 	//Post: A burger was throw at a random person or krusty

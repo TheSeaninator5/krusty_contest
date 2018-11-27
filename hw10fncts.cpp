@@ -1,11 +1,11 @@
 // Programmer: Colton Walker // Date: 11/8/2018
 // instructor Name: Price // Section: 1B
-// File: hw9fncts.cpp // Description: two classes of a burger and customer
+// File: hw10fncts.cpp // Description: two classes of a burger and customer
 
 #include <iostream>
 #include <cmath>
 #include <fstream>
-#include "hw9.h"
+#include "hw10.h"
 
 using namespace std;
 //Functions
@@ -278,39 +278,45 @@ bool customer::getAlive()
 
 void customer::eat()
 {
+  
   burger b;
-  float cheese = 0;
-  float sauce = 0;
-  float wtGain = 0;
-  float cholGain = 0;
-  int die;
-  if(b.getCheese() == true)
-  {
-    cheese = 2.1;
-  }
-  if(b.getSauce() == true)
-  {
-    sauce = 0;	  
-  }
   
-  cholGain = 2.5 * b.getBacon() + (3.14/2) * b.getPattie() + 
-  m_weight/((b.getPickle() + 1)*10);
-  
-  wtGain = 0.5 * pow(b.getPattie(), 2) + (1.0/8)*pow(b.getBacon(), 2) -
-  b.getPickle()/4.0 + cheese + sauce;
-  
-  m_cholesterol = m_cholesterol + cholGain;
-  m_weight = m_weight + wtGain;
-  m_money = m_money - b.getPrice();
-  if(b.getPathogen() == true)
+  if(m_isContestant == true && m_alive == true && m_money >= b.getPrice())
   {
-   	die = (1 + rand() % (101));
-    if(die > m_health)
+  
+    float cheese = 0;
+    float sauce = 0;
+    float wtGain = 0;
+    float cholGain = 0;
+    int die;
+    if(b.getCheese() == true)
     {
-      m_alive = false;
-	}else{
-	  m_vomit = true;
-	}
+      cheese = 2.1;
+    }
+    if(b.getSauce() == true)
+    {
+      sauce = 0;	  
+    }
+  
+    cholGain = 2.5 * b.getBacon() + (3.14/2) * b.getPattie() + 
+    m_weight/((b.getPickle() + 1)*10);
+  
+    wtGain = 0.5 * pow(b.getPattie(), 2) + (1.0/8)*pow(b.getBacon(), 2) -
+    b.getPickle()/4.0 + cheese + sauce;
+  
+    m_cholesterol = m_cholesterol + cholGain;
+    m_weight = m_weight + wtGain;
+    m_money = m_money - b.getPrice();
+    if(b.getPathogen() == true)
+    {
+   	  die = (1 + rand() % (101));
+      if(die > m_health)
+      {
+        m_alive = false;
+	  }else{
+	    m_vomit = true;
+	  }
+    }
   }
   return;	
 }
@@ -358,15 +364,19 @@ ostream &operator<<(ostream& os, customer c)
   return os;
 }
 
-burgermeister operator+= (const float money)
+burgermeister operator+=(burgermeister& Krusty, const float money)
 {
-    m_montHold+=money;
-    return;
+    Krusty.m_montHold+=money;
+    return Krusty;
 }
-burgermeister operator-= (const float money)
+burgermeister operator-=(burgermeister& Krusty, const float money)
 {
-    m_montHold-=money;
-    return;
+    Krusty.m_montHold-=money;
+    return Krusty;
 }
     
+int burgermeister::getMontHold()
+{
+  return m_montHold;	
+}
    

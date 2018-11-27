@@ -4,18 +4,42 @@
 
 #include <iostream>
 #include <cmath>
-#include "hw9.h"
+#include "hw10.h"
 using namespace std;
 
 int main()
 {
   srand(time(NULL));
-  burger a;
-  customer c;
-  cout<<a<<endl;
-  cout<<c<<endl;
-  c.eat(a);
-  cout<<c<<endl;
+  customer contest[15];
+  burgermeister Krusty;
+  Krusty+=5;
+  cout<<"Amount:"<< Krusty.getMontHold()<<endl;
+  Krusty-=5;
+  cout<<"Amount:"<< Krusty.getMontHold()<<endl;
+  bool main_loop = 0;
+  do{
+	//for(int i = 0; i < 15; i++)
+	//{
+	  //cout<<contest[i].getName()<<endl;
+	  //contest[i].eat();
+	  //Check if got pathogen
+	  //if path = true
+	  //roll die
+	//}
+	//for(int i = 14; i >=0; i--)
+	//{
+     // cout<<contest[i].getName()<<endl;
+	//}
+	
+	cout<<contest[0].getName()<<endl;
+	cout<<contest[0].getMoney()<<endl;
+	contest[0].eat();
+	cout<<contest[0].getName()<<endl;
+	cout<<contest[0].getMoney()<<endl;
+	
+	main_loop = 1;
+	  
+  }while(main_loop == 0);
   
   return 0;	
 }
