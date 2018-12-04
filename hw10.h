@@ -83,7 +83,14 @@ class burger
       m_numPickles = 1 + rand() % (4);
       m_hasCheese = rand() % 2;
       m_hasSauce = rand() % 2;
-      m_hasPathogen = !(rand() % 10);
+	  if((rand() % 10) == 0)
+	  {
+        m_hasPathogen = true;
+	  }else
+	  {
+	    m_hasPathogen = false;
+	  }
+      
       m_burgCode = m_numPatties*100 + m_numBacon*10 + m_numPickles;
       m_burgName = burgName(m_burgCode, m_hasCheese, m_hasSauce);
       m_price = static_cast<float>(0.75 * m_numPatties) + 
@@ -179,6 +186,10 @@ class customer
 	int m_health;
 	bool m_vomit;
 	bool m_isContestant;
+	float m_weightGain;
+	bool m_paidDeath;
+	int m_burgEaten;
+	int m_burgNotEaten;
 	
   public:
     //default constructor
@@ -189,12 +200,36 @@ class customer
       m_name = makeName();
       m_money =  25 + rand() % (51);
       m_weight = 90 + rand() % (161);
+	  m_cholesterol = 30 + rand() % (271);
       m_alive = true;
 	  m_health = (1 + rand() % (100));
 	  m_vomit = false;
 	  m_isContestant = true;
+	  m_weightGain = 0;
+	  m_paidDeath = false;
+	  m_burgEaten = 0;
+	  m_burgNotEaten = 0;
     }
-        
+	//
+	//
+	//
+	int getNumBurgEaten();
+	//
+	//
+	//
+	int getBurgNotEaten();
+	//
+	//
+	//
+	friend int findWinner(const customer contest[], const burgermeister krusty);
+	//
+	//
+	//
+	float getWeightGain();
+    //
+    //
+    //
+    int getHealth();
     //Desc: gets the name of the customer
     //Pre: none
     //Post: the name of the customer was returned
@@ -231,6 +266,10 @@ class customer
     //Pre: none
     //Post: the aliveness is now given to the customer
     bool setAlive(const bool alive);
+	//Desc: return if customer is still contestant
+    //Pre: none
+    //Post: returned the customers contestant participation
+	bool isContestant();
     //Desc: Will remove money, increase cholesterol, increase weight,
     //if a pathagen is present then will kill the customer
     //Pre: Customer must be alive
@@ -239,12 +278,20 @@ class customer
 	//Desc: Will throw a burger at a random person in the array or krusty
 	//Pre: None
 	//Post: A burger was throw at a random person or krusty
-	int toss();
+	void toss(customer contest[], burgermeister krusty);
 	//Desc: Will cause the person to vomit and then 50% chance 
 	//for neighbor to vomit
 	//Pre: None
 	//Post: The customer vomited and possibly caused the neighbors to vomit
-	void vomit();
+	void vomit(const int POS, customer contest[], burgermeister krusty);
+	//Desc: checks to see if the person is still alive
+	//Pre: none
+	//Post: sets the person as DEAD if they are not alive
+	void checkAlive();
+	//Desc: makes krusty pay for the death of a person
+	//Pre: person must be DEAD
+	//Post: krusty pays for the death of someone 
+	void payDeath(burgermeister krusty);
 };
 
 

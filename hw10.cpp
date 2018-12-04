@@ -11,35 +11,36 @@ int main()
 {
   srand(time(NULL));
   customer contest[15];
-  burgermeister Krusty;
-  Krusty+=5;
-  cout<<"Amount:"<< Krusty.getMontHold()<<endl;
-  Krusty-=5;
-  cout<<"Amount:"<< Krusty.getMontHold()<<endl;
-  bool main_loop = 0;
+  burgermeister krusty;
+  bool main_loop = true;
   do{
-	//for(int i = 0; i < 15; i++)
-	//{
-	  //cout<<contest[i].getName()<<endl;
-	  //contest[i].eat();
-	  //Check if got pathogen
-	  //if path = true
-	  //roll die
-	//}
-	//for(int i = 14; i >=0; i--)
-	//{
-     // cout<<contest[i].getName()<<endl;
-	//}
-	
-	cout<<contest[0].getName()<<endl;
-	cout<<contest[0].getMoney()<<endl;
-	contest[0].eat();
-	cout<<contest[0].getName()<<endl;
-	cout<<contest[0].getMoney()<<endl;
-	
-	main_loop = 1;
-	  
-  }while(main_loop == 0);
-  
+	  static int round = 1;
+	  //Display contestants
+	  for(int i = 0; i < 14; i++)
+      {
+        cout<<contest[i]<<endl;
+      }
+	  //Display round
+	  cout<<"------------ROUND "<<round<<"--------------"<<endl; 
+	  //Start round eating burgers
+	  for(int i = 0; i < 15; i++)
+	  {
+	    contest[i].eat();
+		contest[i].vomit(i, contest, krusty);
+		contest[i].checkAlive();
+	  }
+	  for(int i = 14; i >=0; i--)
+	  {
+        contest[i].eat();
+		contest[i].vomit(i, contest, krusty);
+		contest[i].checkAlive();
+	  }
+	  cout<<"Krusty's Money: "<<krusty.getMontHold()<<endl;
+	  round++;
+	  if(findWinner(contest, krusty) == 1)
+	  {
+		main_loop = false;  
+	  }
+  }while(main_loop);
   return 0;	
 }
