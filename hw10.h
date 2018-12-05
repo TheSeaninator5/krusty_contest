@@ -2,10 +2,11 @@
 // instructor Name: Price // Section: 1B
 // File: hw9.h // Description: two classes of a burger and customer
 
-#ifndef HW9_H
-#define HW9_H
+#ifndef HW10_H
+#define HW10_H
 #endif
 using namespace std;
+
 
 //Desc: getName() will return a name from the simpson_names.dat file
 //Pre: none
@@ -221,10 +222,6 @@ class customer
 	//
 	//
 	//
-	friend int findWinner(const customer contest[], const burgermeister krusty);
-	//
-	//
-	//
 	float getWeightGain();
     //
     //
@@ -274,16 +271,16 @@ class customer
     //if a pathagen is present then will kill the customer
     //Pre: Customer must be alive
     //Post: Customers money, cholesterol, weight and aliveness were changed
-    void eat();
+    void eat(burgermeister& krusty);
 	//Desc: Will throw a burger at a random person in the array or krusty
 	//Pre: None
 	//Post: A burger was throw at a random person or krusty
-	void toss(customer contest[], burgermeister krusty);
+	void toss(customer contest[], burgermeister& krusty);
 	//Desc: Will cause the person to vomit and then 50% chance 
 	//for neighbor to vomit
 	//Pre: None
 	//Post: The customer vomited and possibly caused the neighbors to vomit
-	void vomit(const int POS, customer contest[], burgermeister krusty);
+	void vomit(const int POS, customer contest[], burgermeister& krusty);
 	//Desc: checks to see if the person is still alive
 	//Pre: none
 	//Post: sets the person as DEAD if they are not alive
@@ -291,8 +288,10 @@ class customer
 	//Desc: makes krusty pay for the death of a person
 	//Pre: person must be DEAD
 	//Post: krusty pays for the death of someone 
-	void payDeath(burgermeister krusty);
+	void payDeath(burgermeister& krusty);
+	
 };
+int findWinner(customer contest[], burgermeister& krusty);
 
 
 ostream &operator<<(ostream &stream, burger b);

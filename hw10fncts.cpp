@@ -277,7 +277,7 @@ bool customer::getAlive()
 {
   return m_alive;
 }
-void customer::payDeath(burgermeister krusty)
+void customer::payDeath(burgermeister& krusty)
 {
   if(m_alive == false && m_paidDeath == false)
   {
@@ -319,7 +319,7 @@ void customer::checkAlive()
   return;	
 }
 
-void customer::toss(customer contest[], burgermeister krusty)
+void customer::toss(customer contest[], burgermeister& krusty)
 {
   burger thrown;
   const int target = rand() % 16;
@@ -342,7 +342,7 @@ void customer::toss(customer contest[], burgermeister krusty)
   return;
 }
 
-void customer::vomit(const int POS, customer contest[], burgermeister krusty)
+void customer::vomit(const int POS, customer contest[], burgermeister& krusty)
 {
   const string VOM_SOUNDS[] = {"YAGHHH", "BLAHHHH", "GAHHG","BLUHH"};
   
@@ -353,7 +353,7 @@ void customer::vomit(const int POS, customer contest[], burgermeister krusty)
 	krusty+=5;
     if(POS == 0)
     {
-        for(int i = 1; i < 14; i++)
+        for(int i = 1; i < 15; i++)
 	    {
 	      if(contest[i].isContestant() == true)
 	      {
@@ -363,12 +363,12 @@ void customer::vomit(const int POS, customer contest[], burgermeister krusty)
 			  krusty+=5;
 	        }else
 	        {
-			  i = 14;
 			  cout<<"\t"<<contest[i].getName()<<" didn't BARF"<<endl;
 			  if((rand() % 10) < 3)
 			  {
 		        contest[i].toss(contest, krusty);
 			  }
+			  i = 15;
 	        }
   	      }
         }
@@ -384,18 +384,18 @@ void customer::vomit(const int POS, customer contest[], burgermeister krusty)
 			krusty+=5;
 	      }else
 	      {
-		    i = 0;
 			cout<<"\t"<<contest[i].getName()<<" didn't BARF"<<endl;
 			if((rand() % 10) < 3)
 			{
 		      contest[i].toss(contest, krusty);
-			}		  
+			}
+            i = 0;			
 	      }
   	    }
       }
 	}else
 	{
-      for(int i = POS+1; i < 14; i++)
+      for(int i = POS+1; i < 15; i++)
 	  {
 	    if(contest[i].isContestant() == true)
 	    {
@@ -405,12 +405,12 @@ void customer::vomit(const int POS, customer contest[], burgermeister krusty)
 			krusty+=5;
 	      }else
 	      {
-			i = 14;
 			cout<<"\t"<<contest[i].getName()<<" didn't BARF"<<endl;
 			if((rand() % 10) < 3)
 			{
 		      contest[i].toss(contest, krusty);
 			}
+			i = 15;
 	      }
   	    }
       }
@@ -424,12 +424,12 @@ void customer::vomit(const int POS, customer contest[], burgermeister krusty)
 			krusty+=5;
 	      }else
 	      {
-		    i = 0;
 			cout<<"\t"<<contest[i].getName()<<" didn't BARF"<<endl;
 			if((rand() % 10) < 3)
 			{
 		      contest[i].toss(contest, krusty);
-			}		  
+			}
+            i = 0;			
 	      }
   	    }
       }
@@ -438,7 +438,7 @@ void customer::vomit(const int POS, customer contest[], burgermeister krusty)
   return;
 }
 
-void customer::eat()
+void customer::eat(burgermeister& krusty)
 {
   
   burger b;
@@ -491,19 +491,15 @@ void customer::eat()
     }
     m_burgNotEaten = 0;
 	m_burgEaten++;
-  }else
+	krusty+=b.getPrice();
+  }else if(m_isContestant == true)
   {
     m_burgNotEaten +=1;
   }
   return;	
 }
-//MAKE CONST ARRAY
-//
-//
-//HELLLLO DONT MISS THIS
-//
-//
-int findWinner(customer contest[], burgermeister krusty)
+
+int findWinner(customer contest[], burgermeister& krusty)
 {
   int end_loop = 0;
   int winner_pos = 0;
@@ -513,19 +509,20 @@ int findWinner(customer contest[], burgermeister krusty)
   int numIC = 0;
   int numBNE = 0;
   
-  for (int i = 0; i < 14; i++)
+  for (int i = 0; i < 15; i++)
   {
 	if(contest[i].isContestant())
 	{
 	  isContCtr++;
       numIC++;
 	}
-    if(contest[i].getBurgNotEaten() >= 1)
+    if((contest[i].getBurgNotEaten() >= 1))
     {
       numBurgNotEaten++;
 	  numBNE++;
+	  
 	}
-	if(numIC == numBNE)
+	if(numIC == numBNE && numBNE != 0)
     {
 	  numPosWinners++;
 	}
@@ -534,42 +531,21 @@ int findWinner(customer contest[], burgermeister krusty)
   }
   
   //Find first possible winner to compare
-  for(int i = 0; i < 14; i++)
+  for(int i = 0; i < 15; i++)
   {
     if(contest[i].isContestant() && (contest[i].getBurgNotEaten() >= 1))
     {
       winner_pos = i;
-	  i = 14;
+	  i = 15;
     }  
   }
+  cout<<"Winner Pos: "<<winner_pos<<endl;
   
-  //Finds winner is numPosWinners is 1
-  if(numBNE == numIC && numPosWinners == 1)
-  {
-	for(int i = 0; i < 14; i++)
-	{
-	  if(contest[i].isContestant() && (contest[i].getBurgNotEaten() >= 1))
-	  {
-        winner_pos = i;
-		i = 14;
-	  }  
-	}
-    cout<<"There was only one remaining contestant and here is their stats... "<<endl;
-    for(int i = 0; i < 14; i++)
-    {
-      if(contest[i].isContestant() && contest[i].getBurgNotEaten() >= 1)
-	  {
-        cout<<contest[i]<<endl;
-	  }
-    }
-    cout<<"Krusty's Stats are... Money: " <<krusty.getMontHold()<<endl<<endl;
-    cout<<"THE WINNER OF KRUSTY'S HORRID AND AWEFULLY KILLING CONTEST IS... "<<endl;
-    cout<<"CONGRADULATIONS "<<contest[winner_pos].getName()<<" ON YOUR WIN!!!"<<endl;
-    end_loop = 1;	
-  }else if(numBNE == numIC)
+  
+  if(numBurgNotEaten == isContCtr && isContCtr == numPosWinners)
   {
 	//Compare other possible winners if possible
-   	for(int i = 0; i < 14; i++)
+   	for(int i = 0; i < 15; i++)
 	{
       if(contest[i].isContestant() == true && contest[i].getBurgNotEaten() >= 1)
 	  {
@@ -583,7 +559,7 @@ int findWinner(customer contest[], burgermeister krusty)
 	  }
 	}
 	cout<<"The remaining contestants and their stats are... "<<endl;
-    for(int i = 0; i < 14; i++)
+    for(int i = 0; i < 15; i++)
     {
       if(contest[i].isContestant() && contest[i].getBurgNotEaten() >= 1)
 	  {
@@ -609,7 +585,15 @@ ostream &operator<<(ostream& os, customer c)
   os << c.getName()<<" money: "<<c.getMoney() <<
         "\n weight: "<<c.getWeight()<<" Cholesterol: "<<
 		c.getCholesterol() << " Health: "<<c.getHealth() <<
-		" Weight Gain: "<<c.getWeightGain();
+		" Weight Gain: "<<c.getWeightGain()<<"\n roundsBurgNotEtn: "<<
+		c.getBurgNotEaten()<<" numBurgEtn: "<<c.getNumBurgEaten()<<" isContestant: ";
+		if(c.isContestant() == true)
+		{
+		  os<<" True ";	
+		}else
+		{
+		  os<<" False ";  	
+		}
         if(c.getAlive() == true)
         {
         os<<" Is ALIVE";
